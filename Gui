@@ -1,1 +1,306 @@
-a
+local DiscordLib = loadstring(game:HttpGet"https://raw.githubusercontent.com/dawid-scripts/UI-Libs/main/discord%20lib.txt")()
+local win = DiscordLib:Window("Test Hub")
+local serv = win:Server("Sakura Stand", "")
+local drops = serv:Channel("Auto Farm Item")
+drops:Toggle("Auto Farm Box, Barrel",false, function(o) 
+ local hr = game.Players.LocalPlayer.Character.HumanoidRootPart 
+ getgenv().autoitem = o
+spawn(function()
+while autoitem do wait()
+if not getgenv().autoitem then break; end
+pcall(function()
+for i, v in pairs(game.Workspace.Item:GetChildren()) do
+if v.Name == "Box" and v:FindFirstChild("Space14") then
+v:Destroy()
+ else
+for i, c in pairs(v:GetChildren()) do
+if v.Name ~= "Chest" then
+if c:IsA("ProximityPrompt") then
+hr.CFrame = v.CFrame*CFrame.new(0,3,0) wait(0.6)
+fireproximityprompt(c) 
+fireproximityprompt(v.ProximityPrompt)
+end
+end
+end
+end
+end
+end)
+end
+end)
+ end)
+drops:Toggle("Auto Farm Box, Barrel, Chest",false, function(o)
+local hr = game.Players.LocalPlayer.Character.HumanoidRootPart
+getgenv().autoitem = o
+spawn(function()
+while autoitem do wait()
+if not getgenv().autoitem then break; end
+pcall(function()
+for i, v in pairs(game.Workspace.Item:GetChildren()) do
+if v.Name == "Box" and v:FindFirstChild("Space14") then
+v:Destroy()
+ else
+for i, c in pairs(v:GetChildren()) do
+if c:IsA("ProximityPrompt") then
+hr.CFrame = v.CFrame*CFrame.new(0,3,0) wait(0.5)
+fireproximityprompt(c) 
+fireproximityprompt(v.ProximityPrompt)
+end
+end
+
+end
+end
+end)
+end
+end)
+end)
+local drops = serv:Channel("Buy Item And Sell Item")
+local buy = nil
+local buyl = {}
+for i, c in pairs(game.ReplicatedStorage.BuyItemRemote:GetChildren()) do
+if c:IsA("RemoteEvent") then
+table.insert(buyl,c.Name)
+end
+end
+drops:Dropdown("Choose",buyl, function(tool) 
+for i, a in pairs(game.ReplicatedStorage.BuyItemRemote:GetChildren()) do
+if tool == a.Name then 
+buy = tool
+end
+end
+end)
+drops:Button("Chosse Item To Buy x1", function()
+game.ReplicatedStorage.BuyItemRemote[buy]:FireServer()
+end)
+drops:Button("Chosse Item To Buy x10", function()
+for _ = 1,10 do
+game.ReplicatedStorage.BuyItemRemote[buy]:FireServer()
+end
+end)
+drops:Button("Chosse Item To Buy x20", function()
+for _ = 1,20 do
+game.ReplicatedStorage.BuyItemRemote[buy]:FireServer()
+end
+end)
+drops:Button("Chosse Item To Buy x30", function()
+for _ = 1,30 do 
+game.ReplicatedStorage.BuyItemRemote[buy]:FireServer()
+end
+end)
+drops:Button("Chosse Item To Buy x50", function()
+for _ = 1,50 do
+game.ReplicatedStorage.BuyItemRemote[buy]:FireServer()
+end
+end)
+drops:Seperator()
+drops:Toggle("Auto Sell All Item",false, function(k)
+getgenv().autosell = k
+while autosell do wait()
+for i, v in pairs(game.ReplicatedStorage.GlobalUsedRemotes:GetChildren()) do
+if v:IsA("RemoteEvent") and v.Name == "SellItem" then
+v:FireServer("Arrow")
+v:FireServer("Rokakaka")
+v:FireServer("Mysterious Camera")
+v:FireServer("Hamon Manual")
+v:FireServer("Stop Sign")
+v:FireServer("Stone Mask")
+v:FireServer("Barrel")
+v:FireServer("Spin Manual")
+v:FireServer("Bomu Bomu Devil Fruit")
+v:FireServer("Mochi Mochi Devil Fruit")
+v:FireServer("Bari Bari Devil Fruit")
+end
+end
+end
+end)
+local btns = serv:Channel("Player")
+ btns:Button("Fast Mode", function()  
+  local ToDisable = {  
+          Textures = true,  
+          VisualEffects = true,  
+          Parts = true,  
+          Particles = true,  
+          Sky = true  
+  }  
+  
+  local ToEnable = {  
+          FullBright = false  
+  }  
+  
+  local Stuff = {}  
+  
+  for _, v in next, game:GetDescendants() do  
+          if ToDisable.Parts then  
+                  if v:IsA("Part") or v:IsA("Union") or v:IsA("BasePart") then  
+                          v.Material = Enum.Material.SmoothPlastic  
+                          table.insert(Stuff, 1, v)  
+                  end  
+          end  
+  
+          if ToDisable.Particles then  
+                  if v:IsA("ParticleEmitter") or v:IsA("Smoke") or v:IsA("Explosion") or v:IsA("Sparkles") or v:IsA("Fire") then  
+                          v.Enabled = false  
+                          table.insert(Stuff, 1, v)  
+                  end  
+          end  
+  
+          if ToDisable.VisualEffects then  
+                  if v:IsA("BloomEffect") or v:IsA("BlurEffect") or v:IsA("DepthOfFieldEffect") or v:IsA("SunRaysEffect") then  
+                          v.Enabled = false  
+                          table.insert(Stuff, 1, v)  
+                  end  
+          end  
+  
+          if ToDisable.Textures then  
+                  if v:IsA("Decal") or v:IsA("Texture") then  
+                          v.Texture = ""  
+                          table.insert(Stuff, 1, v)  
+                  end  
+          end  
+  
+          if ToDisable.Sky then  
+                  if v:IsA("Sky") then  
+                          v.Parent = nil  
+                          table.insert(Stuff, 1, v)  
+                  end  
+          end  
+  end  
+  
+  game:GetService("TestService"):Message("Effects Disabler Script : Successfully disabled "..#Stuff.." assets / effects. Settings :")  
+  
+  for i, v in next, ToDisable do  
+          print(tostring(i)..": "..tostring(v))  
+  end  
+  
+  if ToEnable.FullBright then  
+      local Lighting = game:GetService("Lighting")  
+  
+      Lighting.FogColor = Color3.fromRGB(255, 255, 255)  
+      Lighting.FogEnd = math.huge  
+      Lighting.FogStart = math.huge  
+      Lighting.Ambient = Color3.fromRGB(255, 255, 255)  
+      Lighting.Brightness = 5  
+      Lighting.ColorShift_Bottom = Color3.fromRGB(255, 255, 255)  
+      Lighting.ColorShift_Top = Color3.fromRGB(255, 255, 255)  
+      Lighting.OutdoorAmbient = Color3.fromRGB(255, 255, 255)  
+      Lighting.Outlines = true  
+  end  
+  end) 
+ btns:Button("Rejoin", function() 
+ local tps = game:GetService("TeleportService") 
+                 local plr = game:GetService("Players").LocalPlayer 
+                 tps:TeleportToPlaceInstance(game.PlaceId, game.JobId, plr) 
+ end)
+btns:Button("Reset Character", function()
+game.Players.LocalPlayer.Character.Humanoid.Health = 0
+end)
+local sldrs = serv:Channel("Walk Speed") 
+ local sldr = sldrs:Slider("Speeds", 0, 1000, 0, function(v) 
+  
+ game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = v 
+ end) 
+ sldrs:Button("Speed 1000", function() 
+ sldr:Change(1000) 
+ end) 
+ sldrs:Button("Speed 500", function() 
+ sldr:Change(500) 
+ end) 
+ sldrs:Button("Speed 300", function() 
+ sldr:Change(300) 
+ end) 
+ sldrs:Button("Speed 100", function() 
+ sldr:Change(100) 
+ end) 
+ sldrs:Button("Speed 50", function() 
+ sldr:Change(50) 
+ end) 
+ sldrs:Button("Speed 30", function() 
+ sldr:Change(30) 
+ end) 
+ local sldr = sldrs:Slider("Jumps", 0, 1000, 0, function(v) 
+  
+ game.Players.LocalPlayer.Character.Humanoid.JumpPower = v 
+ end) 
+ sldrs:Button("Jump 1000", function() 
+ sldr:Change(1000) 
+ end) 
+ sldrs:Button("Jump 500", function() 
+ sldr:Change(500) 
+ end) 
+ sldrs:Button("Jump 300", function() 
+ sldr:Change(300) 
+ end) 
+ sldrs:Button("Jump 100", function() 
+ sldr:Change(100) 
+ end) 
+ sldrs:Button("Jump 70", function() 
+ sldr:Change(70) 
+ end) 
+ local sldr = sldrs:Slider("height", 0, 100, 0, function(v) 
+ game.Players.LocalPlayer.Character.Humanoid.HipHeight = v 
+ end) 
+ sldrs:Button("height 100", function() 
+ sldr:Change(100) 
+ end) 
+ sldrs:Button("height 50", function() 
+ sldr:Change(50) 
+ end) 
+ sldrs:Button("height 30", function() 
+ sldr:Change(30) 
+ end) 
+ sldrs:Button("height 10", function() 
+ sldr:Change(10) 
+ end) 
+ sldrs:Button("Clear", function(v) 
+ game.Players.LocalPlayer.Character.Humanoid.HipHeight = 2 
+ game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = 16 
+ game.Players.LocalPlayer.Character.Humanoid.JumpPower = 50 
+ end) 
+ local btns = serv:Channel("Others Script") 
+ btns:Label("Cre Hub: Grabiel Ynu") 
+ btns:Button("AUT OLD UNIVERSE", function() 
+ loadstring(game:HttpGet("https://raw.githubusercontent.com/ginchao/OUT-OLD-UNIVERSE/main/UNIVERSE%20OLD" ,true))() 
+ end) 
+ btns:Button("Viet Nam Piece", function() 
+ loadstring(game:HttpGet('https://raw.githubusercontent.com/ginchao/Viet-Nam-Piece/main/Beta'))() 
+ end) 
+btns:Button("Lucky Block Battleground", function()
+loadstring(game:HttpGet('https://raw.githubusercontent.com/ginchao/LuckyBlockBattleground/main/HttVeg'))()
+end)
+ btns:Seperator() 
+       btns:Button("Infinite Yield", function() 
+ loadstring(game:HttpGet('https://raw.githubusercontent.com/EdgeIY/infiniteyield/master/source'))() 
+   end) 
+ btns:Button("Anti Afk", function() 
+ loadstring(game:HttpGet("https://raw.githubusercontent.com/ginchao/Anti-AFK/main/NO%20KICK" ,true))() 
+ end) 
+ btns:Button("Keyboard", function() 
+  
+                        loadstring(game:HttpGet("https://raw.githubusercontent.com/advxzivhsjjdhxhsidifvsh/mobkeyboard/main/main.txt", true))() 
+     end)          
+ btns:Button("FlyV3", function() 
+ loadstring(game:HttpGet("https://raw.githubusercontent.com/XNEOFF/FlyGuiV3/main/FlyGuiV3.txt"))()
+        end) 
+  
+ btns:Button("Shift Lock", function() 
+  
+         loadstring(game:HttpGet("https://raw.githubusercontent.com/MiniNoobie/ShiftLockx/main/Shiftlock-MiniNoobie",true))() 
+ end) 
+ btns:Button("DEX PC", function() 
+ loadstring(game:HttpGet('https://raw.githubusercontent.com/infyiff/backup/main/dex.lua'))() 
+ end) 
+ btns:Button("DEXv4 PC", function() 
+ loadstring(game:GetObjects("rbxassetid://418957341")[1].Source)() 
+ end) 
+ btns:Button("Remote Spy", function() 
+ loadstring(game:HttpGet("https://raw.githubusercontent.com/Hosvile/Refinement/main/Forked/M%3ASimpleSpy%20V3" ,true))() 
+ end) 
+ btns:Button("CCTV Camera", function() 
+ loadstring(game:HttpGet("https://raw.githubusercontent.com/GhostPlayer352/Test4/main/CCTV%20Camera"))(); 
+ end) 
+ btns:Button("Invisible X Teleport", function() 
+ loadstring(game:HttpGet('https://raw.githubusercontent.com/0Ben1/fe./dbb6ce6f6cee4f7a5c9e20d7b88e83db2a93bf25/Invisible%20GUI'))() 
+ end) 
+ 
+
+
+
